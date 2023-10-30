@@ -18,6 +18,6 @@ def get_data(days):
 
 d, t = get_data(days)
 
-figure = px.line(x=date, y=temp, labels={"x": "date", "y": "Temperature(C)"})
+figure = px.line(x=d, y=t, labels={"x": "date", "y": "Temperature(C)"})
 
 st.plotly_chart(figure)
