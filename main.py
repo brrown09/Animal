@@ -17,18 +17,19 @@ option = st.selectbox("Select data to view", ("Temperature", "Sky"))
 # Print a subheader
 st.subheader(f"{option} for the next {days} days in {place}")
 
-
-
 # If the place is not empty
 if place:
-    # Filter the data based on the user's input
-    filtered_data = get_data(place, days)
+    try:
+        # Filter the data based on the user's input
+        filtered_data = get_data(place, days)
+    except KeyError:
+        st.error("Place input is unknown")
+        st.stop()
 
     # If the user wants to see the temperature
     if option == "Temperature":
-
         # Create a list of temperatures
-        temperatures = [dict["main"]["temp"] for dict in filtered_data]
+        temperatures = [dict["main"]["temp"] / 10 for dict in filtered_data]
 
         # Create a list of dates
         dates = [dict["dt_txt"] for dict in filtered_data]
@@ -46,8 +47,4 @@ if place:
         # Filter the data to only include the sky condition
         sky_conditions = [dict["weather"][0]["main"] for dict in filtered_data]
         image_paths = [images[condition] for condition in sky_conditions]
-        print(sky_conditions)
-
-        # Display an image of the sky conditions
         st.image(image_paths, width=115)
-
