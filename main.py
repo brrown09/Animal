@@ -22,29 +22,30 @@ if place:
     try:
         # Filter the data based on the user's input
         filtered_data = get_data(place, days)
-    except KeyError:
-        st.error("Place input is unknown")
-        st.stop()
 
-    # If the user wants to see the temperature
-    if option == "Temperature":
-        # Create a list of temperatures
-        temperatures = [dict["main"]["temp"] / 10 for dict in filtered_data]
+        # If the user wants to see the temperature
+        if option == "Temperature":
+            # Create a list of temperatures
+            temperatures = [dict["main"]["temp"] / 10 for dict in filtered_data]
 
-        # Create a list of dates
-        dates = [dict["dt_txt"] for dict in filtered_data]
+            # Create a list of dates
+            dates = [dict["dt_txt"] for dict in filtered_data]
 
-        # Create a line plot of the temperature
-        figure = px.line(x=dates, y=temperatures, labels={"x": "Date", "y": "Temperature(C)"})
+            # Create a line plot of the temperature
+            figure = px.line(x=dates, y=temperatures, labels={"x": "Date", "y": "Temperature(C)"})
 
-        # Display the plot on Streamlit
-        st.plotly_chart(figure)
+            # Display the plot on Streamlit
+            st.plotly_chart(figure)
 
     # If the user wants to see the sky
-    if option == "Sky":
-        images = {"Clear": "images/clear.png", "Clouds": "images/cloud.png", "Rain": "images/rain.png",
-                  "Snow": "images/snow.png"}
-        # Filter the data to only include the sky condition
-        sky_conditions = [dict["weather"][0]["main"] for dict in filtered_data]
-        image_paths = [images[condition] for condition in sky_conditions]
-        st.image(image_paths, width=115)
+        if option == "Sky":
+            images = {"Clear": "images/clear.png", "Clouds": "images/cloud.png", "Rain": "images/rain.png",
+                      "Snow": "images/snow.png"}
+            # Filter the data to only include the sky condition
+            sky_conditions = [dict["weather"][0]["main"] for dict in filtered_data]
+            image_paths = [images[condition] for condition in sky_conditions]
+            st.image(image_paths, width=115)
+    except KeyError:
+        st.write("That place does not exist")
+
+
